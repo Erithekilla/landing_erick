@@ -98,6 +98,59 @@ navLinks.querySelectorAll("a").forEach((link) => {
   });
 });
 
+document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+  const track = carousel.querySelector(".portfolio-track");
+  const slides = Array.from(carousel.querySelectorAll(".portfolio-slide"));
+  const dots = Array.from(carousel.querySelectorAll(".carousel-dots button"));
+  const previousButton = carousel.querySelector(".carousel-prev");
+  const nextButton = carousel.querySelector(".carousel-next");
+  let currentSlide = 0;
+  let touchStartX = null;
+
+  function showSlide(index) {
+    currentSlide = (index + slides.length) % slides.length;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+    slides.forEach((slide, slideIndex) => {
+      slide.setAttribute("aria-hidden", String(slideIndex !== currentSlide));
+    });
+
+    dots.forEach((dot, dotIndex) => {
+      dot.setAttribute("aria-current", String(dotIndex === currentSlide));
+    });
+  }
+
+  previousButton.addEventListener("click", () => showSlide(currentSlide - 1));
+  nextButton.addEventListener("click", () => showSlide(currentSlide + 1));
+  dots.forEach((dot, dotIndex) => dot.addEventListener("click", () => showSlide(dotIndex)));
+
+  carousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showSlide(currentSlide - 1);
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showSlide(currentSlide + 1);
+    }
+  });
+
+  carousel.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+  }, { passive: true });
+
+  carousel.addEventListener("touchend", (event) => {
+    if (touchStartX === null) return;
+    const distance = event.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(distance) > 50) showSlide(currentSlide + (distance < 0 ? 1 : -1));
+    touchStartX = null;
+  }, { passive: true });
+});
+
+document.querySelectorAll("a[aria-disabled='true']").forEach((link) => {
+  link.addEventListener("click", (event) => event.preventDefault());
+});
+
 document.querySelectorAll("details").forEach((detail) => {
   detail.addEventListener("toggle", () => {
     if (detail.open) {
