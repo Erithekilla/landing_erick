@@ -48,7 +48,7 @@ function openModal(card) {
     modalContent.appendChild(template.content.cloneNode(true));
   }
   modalWhatsapp.onclick = () => {
-    openWhatsApp(card.dataset.whatsappMessage || `Olá, Yohan! Quero solicitar um orçamento para ${card.dataset.service} (${card.dataset.price}).`);
+    openWhatsApp(card.dataset.whatsappMessage || `Olá, Erick! Quero solicitar um orçamento para ${card.dataset.service} (${card.dataset.price}).`);
     closeModal();
   };
 

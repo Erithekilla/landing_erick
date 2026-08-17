@@ -147,3 +147,6 @@
   .modal-overlay{padding-right:6px;padding-left:6px}
   .modal{padding-right:18px;padding-left:18px}
 }
+
+/* Divisão entre a apresentação e o processo */
+.how{border-top:1px solid rgba(222,194,255,.22)}
